@@ -1,11 +1,11 @@
 'use strict'
-import Koa from 'koa'
-import koa_router from 'koa-router'
-import json from 'koa-json'
-import logger from 'koa-logger'
-import koa_body_parser from 'koa-bodyparser'
+const Koa = require('koa')
+const koa_router = require('koa-router')
+const json = require('koa-json')
+const logger = require('koa-logger')
+const koa_body_parser = require('koa-bodyparser')
 
-import auth from './server/routes/auth'
+const auth = require('./server/routes/auth')
 
 const app = new Koa()
 const router = koa_router()

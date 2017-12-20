@@ -1,6 +1,6 @@
 // controllers/user.js
 
-import user from '../models/user.js'
+const user = require('../models/user.js')
 
 const getUserInfo = async function (ctx) {
   const id = ctx.params.id // 获取url里传过来的参数里的id
@@ -23,13 +23,13 @@ const authorize = async function (ctx) {
       let relations = await user.getRelations(getUser.dataValues.id)
       let addition = await user.getAddition(getUser.dataValues.id)
       let cases = await user.getCases(getUser.dataValues.id)
+      shareInfo.relation = relations
+      shareInfo.addition = addition
+      shareInfo.cases = cases
       ctx.body = {
         success: true,
         info: '登录成功',
-        shareInfo: shareInfo,
-        relation: relations,
-        addition: addition,
-        cases: cases
+        shareInfo: shareInfo
       }
     } else {
       ctx.body = {
@@ -47,7 +47,109 @@ const authorize = async function (ctx) {
   // ctx.body = getUser
 }
 
-export default {
+const passwordReset = async function (ctx) {
+  const data = ctx.request.header
+  console.log(data)
+  const getUser = await user.getUserByAccount(data.account)
+  if (getUser !== null) {
+    let status = await user.resetPassword(getUser.dataValues.id, getUser.dataValues.account, data.password)
+    console.log('in password reset, status is', status)
+    if (status) {
+      ctx.body = {
+        success: status,
+        info: '更改成功'
+      }
+    } else {
+      ctx.body = {
+        success: status,
+        info: '更改失败'
+      }
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      info: '帐号不存在'
+    }
+  }
+}
+
+const updateInfo = async function (ctx) {
+  const data = ctx.request.body
+  console.log(data)
+  const getUser = await user.getUserByAccount(data.account)
+  if (getUser !== null) {
+    //
+    let status = await user.update(getUser.dataValues.id, data.info)
+    console.log('in update, status is', status)
+    if (status) {
+      ctx.body = {
+        success: status,
+        info: '更新成功'
+      }
+    } else {
+      ctx.body = {
+        success: status,
+        info: '更新失败'
+      }
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      info: '帐号不存在'
+    }
+  }
+}
+
+const add = async function (ctx) {
+  const data = ctx.request.body
+  console.log(data)
+  const getUser = await user.getUserByAccount(data.account)
+  if (getUser !== null) {
+    // add cases
+    if ('cases' in data) {
+      let status = await user.addCase(getUser.dataValues.id, data.cases)
+      console.log('in add cases, status is', status)
+      if (status) {
+        ctx.body = {
+          success: status,
+          info: '添加成功'
+        }
+      } else {
+        ctx.body = {
+          success: status,
+          info: '添加失败'
+        }
+      }
+    }
+    // add addition
+    // add relations
+    if ('relations' in data) {
+      let status = await user.addRelation(getUser.dataValues.id, data.relations)
+      console.log('in add relation, status is', status)
+      if (status) {
+        ctx.body = {
+          success: status,
+          info: '添加成功'
+        }
+      } else {
+        ctx.body = {
+          success: status,
+          info: '添加失败'
+        }
+      }
+    }
+  } else {
+    ctx.body = {
+      success: false,
+      info: '帐号不存在'
+    }
+  }
+}
+
+module.exports = {
   getUserInfo, // 把获取用户信息的方法暴露出去
-  authorize
+  authorize,
+  passwordReset,
+  updateInfo,
+  add
 }
