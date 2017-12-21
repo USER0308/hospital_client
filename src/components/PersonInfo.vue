@@ -217,6 +217,13 @@
         console.log('modify')
         console.log(this.modifyKey)
         console.log(this.modifyValue)
+        let key = this.modifyKey
+        let info = {}
+        info[key] = value
+        this.$http.post('/auth/user/update', {
+          account: this.account,
+          info: info
+        })
         this.$message.success('更新成功')
       },
       focus (key) {
