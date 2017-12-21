@@ -86,6 +86,31 @@
         console.log('account: ', this.account)
         console.log('password: ', this.password)
         console.log('hospital: ', this.value)
+        let object = {
+          account: this.account,
+          password: this.password
+        }
+        this.$http.post('/auth/user', object)
+          .then((res) => {
+            console.log(res.data)
+            if (res.data.success) {
+              this.$message.success(res.data.info)
+              this.$router.push({
+                path: '/userinfo/:info',
+                name: 'UserInfo',
+                params: {
+                  info: {
+                    account: this.account,
+                    shareInfo: res.data.shareInfo
+                  }
+                }
+              })
+            } else {
+              this.$message.error(res.data.info)
+            }
+          }, (err) => {
+            console.log('in post authorize, error is', err)
+          })
       },
       selectChange () {
         // alert(this.value)

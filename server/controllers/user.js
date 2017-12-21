@@ -3,14 +3,15 @@
 const user = require('../models/user.js')
 
 const getUserInfo = async function (ctx) {
-  const id = ctx.params.id // 获取url里传过来的参数里的id
-  console.log('id is ', id)
-  const result = await user.getUserById(id)  // 通过yield “同步”地返回查询结果
+  const account = ctx.request.body // 获取url里传过来的参数里的id
+  console.log('account is ', account)
+  const result = await user.getUserByAccount(account)  // 通过yield “同步”地返回查询结果
+  // result.dataValues.id
   ctx.body = result // 将请求的结果放到response的body里返回
 }
 
 const authorize = async function (ctx) {
-  const data = ctx.request.header
+  const data = ctx.request.body
   // console.log('ctx is', ctx)
   // console.log('data is:', data)
   // console.log('account is:', data.account)
@@ -48,7 +49,7 @@ const authorize = async function (ctx) {
 }
 
 const passwordReset = async function (ctx) {
-  const data = ctx.request.header
+  const data = ctx.request.body
   console.log(data)
   const getUser = await user.getUserByAccount(data.account)
   if (getUser !== null) {
@@ -146,10 +147,30 @@ const add = async function (ctx) {
   }
 }
 
+const getCasesByAccount = async function (ctx) {
+  const data = ctx.request.body
+  const getUser = await user.getUserByAccount(data.account)
+  if (getUser !== null) {
+    let result = await user.getCases(getUser.dataValues.id)
+    ctx.body = {
+      success: true,
+      info: '查询成功',
+      cases: result
+    }
+    console.log('query result is', result)
+  } else {
+    ctx.body = {
+      success: false,
+      info: '帐号不存在'
+    }
+  }
+}
+
 module.exports = {
   getUserInfo, // 把获取用户信息的方法暴露出去
   authorize,
   passwordReset,
   updateInfo,
-  add
+  add,
+  getCasesByAccount
 }

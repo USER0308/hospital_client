@@ -12,7 +12,7 @@ export default new Router({
       component: Login
     },
     {
-      path: '/userinfo',
+      path: '/userinfo/:info',
       name: 'UserInfo',
       component: UserInfo
     }

@@ -37,91 +37,91 @@
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="姓名">
-                    <el-input placeholder="name" @focus="focus('name')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.name" placeholder="name" @focus="focus('name')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="性别">
-                    <el-input placeholder="gender" @focus="focus('gender')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.gender" placeholder="gender" @focus="focus('gender')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="婚姻状态">
-                    <el-input placeholder="marriage" @focus="focus('marriage')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.marriage" placeholder="marriage" @focus="focus('marriage')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="年龄">
-                    <el-input placeholder="age" @focus="focus('age')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.age" placeholder="age" @focus="focus('age')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="居住地">
-                    <el-input placeholder="resident" @focus="focus('resident')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.resident" placeholder="resident" @focus="focus('resident')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="联系方式">
-                    <el-input placeholder="phone" @focus="focus('phone')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.phone" placeholder="phone" @focus="focus('phone')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="身份证号码">
-                    <el-input placeholder="pin" @focus="focus('pin')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.pin" placeholder="pin" @focus="focus('pin')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="籍贯">
-                    <el-input placeholder="birthplace" @focus="focus('birthplace')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.birthplace" placeholder="birthplace" @focus="focus('birthplace')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="民族">
-                    <el-input placeholder="nationality" @focus="focus('nationality')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.nationality" placeholder="nationality" @focus="focus('nationality')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="职业">
-                    <el-input placeholder="occupation" @focus="focus('occupation')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.occupation" placeholder="occupation" @focus="focus('occupation')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="过敏原">
-                    <el-input placeholder="anaphylactogen" @focus="focus('anaphylactogen')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.anaphylactogen" placeholder="anaphylactogen" @focus="focus('anaphylactogen')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="感染病史">
-                    <el-input placeholder="infectiousDiseaseHistory" @focus="focus('infectiousDiseaseHistory')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.infectiousDiseaseHistory" placeholder="infectiousDiseaseHistory" @focus="focus('infectiousDiseaseHistory')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="15" :offset="3">
                   <el-form-item label="遗传病史">
-                    <el-input placeholder="geneticDiseaseHistory" @focus="focus('geneticDiseaseHistory')" @change="changeValue"></el-input>
+                    <el-input v-model="userInfo.geneticDiseaseHistory" placeholder="geneticDiseaseHistory" @focus="focus('geneticDiseaseHistory')" @change="changeValue"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -130,8 +130,9 @@
           <div id="record" v-show="recordVisible">
             <el-collapse v-model="activeNames" @change="handleChange">
               <el-collapse-item title="个人病例" name="1">
-                <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+                <div v-for="ca in cases">
+                  {{ ca }}
+                </div>
               </el-collapse-item>
               <el-collapse-item title="个人体检单" name="2">
                 <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
@@ -158,12 +159,48 @@
   export default {
     data () {
       return {
+        account: '',
         infoVisible: true,
         recordVisible: false,
         activeNames: ['1'],
         modifyKey: '',
-        modifyValue: ''
+        modifyValue: '',
+        userInfo: {
+          age: '',
+          anaphylactogen: '',
+          birthplace: '',
+          gender: '',
+          geneticDiseaseHistory: '',
+          infectiousDiseaseHistory: '',
+          marriage: '',
+          name: '',
+          nationality: '',
+          occupation: '',
+          phone: '',
+          pin: '',
+          resident: ''
+        },
+        cases: []
       }
+    },
+    mounted: function () {
+      if (!this.$route.params.info) {
+        this.$router.push('/')
+        return
+      }
+      console.log('account is', this.$route.params.info.account)
+      this.account = this.$route.params.info.account
+      console.log('shareinfo is: ', this.$route.params.info.shareInfo)
+      this.userInfo = this.$route.params.info.shareInfo
+      console.log('account is', this.account)
+      this.$http.post('/auth/user/getCases', {account: this.account})
+        .then((res) => {
+          console.log(res.data.info)
+          this.cases = res.data.cases
+          console.log(res.data.cases)
+        }, (err) => {
+          console.log('in query cases error is:', err)
+        })
     },
     methods: {
       handleSelect (value) {
