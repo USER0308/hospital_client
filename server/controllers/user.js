@@ -24,9 +24,10 @@ const authorize = async function (ctx) {
       let relations = await user.getRelations(getUser.dataValues.id)
       let addition = await user.getAddition(getUser.dataValues.id)
       let cases = await user.getCases(getUser.dataValues.id)
-      shareInfo.relation = relations
-      shareInfo.addition = addition
-      shareInfo.cases = cases
+      shareInfo.dataValues['relation'] = relations
+      shareInfo.dataValues['addition'] = addition
+      shareInfo.dataValues['cases'] = cases
+      console.log('shareinfo is:', shareInfo)
       ctx.body = {
         success: true,
         info: '登录成功',
@@ -166,11 +167,112 @@ const getCasesByAccount = async function (ctx) {
   }
 }
 
+const validate = async function (ctx) {
+  const data = ctx.request.body
+  if ('info' in data) {
+    await user.createUser(data.token, data.info)
+    ctx.body = {
+      success: true,
+      info: '获得授权'
+    }
+  } else {
+    if (user.correct(data.token)) {
+      ctx.body = {
+        success: true,
+        info: 'token 正确'
+      }
+    } else {
+      ctx.body = {
+        success: false,
+        info: 'token 不正确'
+      }
+    }
+  }
+}
+
+const operation = async function (ctx) {
+  const data = ctx.body
+  if (data.type === '1') {
+    // add
+    // data = {
+    // account
+    // cases
+    // (relations)
+    const getUser = await user.getUserByAccount(data.account)
+    if (getUser !== null) {
+      // add cases
+      if ('cases' in data) {
+        let status = await user.addCase(getUser.dataValues.id, data.cases)
+        console.log('in add cases, status is', status)
+        if (status) {
+          ctx.body = {
+            success: status,
+            info: '添加成功'
+          }
+        } else {
+          ctx.body = {
+            success: status,
+            info: '添加失败'
+          }
+        }
+      }
+      // add addition
+      // add relations
+      if ('relations' in data) {
+        let status = await user.addRelation(getUser.dataValues.id, data.relations)
+        console.log('in add relation, status is', status)
+        if (status) {
+          ctx.body = {
+            success: status,
+            info: '添加成功'
+          }
+        } else {
+          ctx.body = {
+            success: status,
+            info: '添加失败'
+          }
+        }
+      }
+    } else {
+      ctx.body = {
+        success: false,
+        info: '帐号不存在'
+      }
+    }
+  } else if (data.type === '2') {
+    // remove
+  } else if (data.type === '0') {
+    // update
+    // data = {
+    // account
+    // key
+    // value
+    const u = await user.getUserByAccount(data.account)
+    if (u === null) {
+      ctx.body = {
+        success: false,
+        info: '帐号不存在'
+      }
+      return
+    }
+    let obj = {}
+    let key = data.key
+    obj[key] = data.value
+    await user.update(u.dataValues.id, obj)
+    ctx.body = {
+      success: true,
+      info: '更新成功'
+    }
+  }
+}
+
 module.exports = {
   getUserInfo, // 把获取用户信息的方法暴露出去
   authorize,
   passwordReset,
   updateInfo,
   add,
-  getCasesByAccount
+  getCasesByAccount,
+  validate,
+  operation
 }

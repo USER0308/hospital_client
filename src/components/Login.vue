@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <span class="title">合作医院登录</span>
+        <span class="title" id="scutHospital">合作医院登录</span>
       </el-header>
       <el-container id="myContainer">
       <el-aside width="50%">
@@ -30,7 +30,7 @@
           </el-col>
         </el-row>
       </el-aside>
-        <el-main>
+        <el-main id="myMain">
           <hr>
           华南理工大学附属医院将会获得以下权限和信息
           <hr>
@@ -45,8 +45,6 @@
         </el-main>
       </el-container>
     </el-container>
-
-
   </div>
 </template>
 
@@ -95,6 +93,7 @@
             console.log(res.data)
             if (res.data.success) {
               this.$message.success(res.data.info)
+              console.log(res.data.shareInfo)
               this.$router.push({
                 path: '/userinfo/:info',
                 name: 'UserInfo',
@@ -120,8 +119,16 @@
 </script>
 
 <style lang="stylus" scoped>
+  #myMain
+    margin-right 80px
   #myContainer
     margin-top 120px
+  #scutHospital
+    float left
+    margin-top 10px
+    margin-left 20px
+    font-size  25px
+    margin-bottom 10px
   .el-header
     background-color #129eff
   .el-row.content

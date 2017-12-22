@@ -204,6 +204,69 @@ const addRelation = async function (id, relations) {
   // }
 }
 
+const createUser = async function (token, info) {
+  await User.create({
+    account: token,
+    password: Math.random().toString(36).substr(2)
+  })
+  const u = await getUserByAccount(token)
+  let shareInfo = info
+  let relations = info.relation
+  let cases = info.cases
+  let addition = info.addition
+  await ShareInfo.create({
+    user_id: u.dataValues.id,
+    marriage: shareInfo.marriage,
+    gender: shareInfo.gender,
+    age: shareInfo.age,
+    resident: shareInfo.resident,
+    phone: shareInfo.phone,
+    pin: shareInfo.pin,
+    name: shareInfo.name,
+    birthplace: shareInfo.birthplace,
+    nationality: shareInfo.nationality,
+    occupation: shareInfo.occupation,
+    anaphylactogen: shareInfo.anaphylactogen,
+    infectiousDiseaseHistory: shareInfo.infectiousDiseaseHistory,
+    geneticDiseaseHistory: shareInfo.geneticDiseaseHistory
+  })
+  for (let i = 0; i < relations.length; i++) {
+    await Relations.create({
+      user_id: u.dataValues.id,
+      relation_name: relations[i].relation_name,
+      relation_phone: relations[i].relation_phone,
+      relation: relations[i].relation
+    })
+  }
+  for (let i = 0; i < addition.length; i++) {
+    await Addition.create({
+      user_id: u.dataValues.id,
+      smoke: addition[i].smoke,
+      alcohol: addition[i].alcohol
+    })
+  }
+  for (let i = 0; i < cases.length; i++) {
+    await Cases.create({
+      user_id: u.dataValues.id,
+      hospital_name: cases[i].hospital_name,
+      case_date: cases[i].case_date,
+      doctor_name: cases[i].doctor_name,
+      situation: cases[i].situation,
+      suggestion: cases[i].suggestion,
+      prescription: cases[i].prescription,
+      diagnosis: cases[i].diagnosis
+    })
+  }
+}
+
+const correct = async function (token) {
+  const result = await User.findOne({
+    where: {account: token}
+  })
+  console.log(result)
+  return result === null
+}
+
 module.exports = {
   // getUserById,  // 导出getUserById的方法，将会在controller里调用
   getUserByAccount,
@@ -215,5 +278,7 @@ module.exports = {
   update,
   // add,
   addCase,
-  addRelation
+  addRelation,
+  createUser,
+  correct
 }
