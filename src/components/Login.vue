@@ -69,13 +69,13 @@
         account: '',
         password: '',
         totalHospital: [{
-          value: '广东省人民医院',
-          label: '广东省人民医院'
+          value: 'org1', // 广东省人民医院
+          label: 'org1'
         }, {
-          value: '广东省华南理工大学附属医院',
-          label: '广东省华南理工大学附属医院'
+          value: 'org2',
+          label: 'org2' // 广东省华南理工大学附属医院
         }],
-        value: '广东省华南理工大学附属医院',
+        value: 'org2',
         selection: ''
       }
     },
@@ -85,25 +85,51 @@
         console.log('password: ', this.password)
         console.log('hospital: ', this.value)
         let object = {
-          account: this.account,
-          password: this.password
+          username: this.account,
+          password: this.password,
+          org: this.value
         }
-        this.$http.post('/auth/user', object)
+        this.$http.post('http://192.168.8.87:8889/login', object)
           .then((res) => {
             console.log(res.data)
-            if (res.data.success) {
-              this.$message.success(res.data.info)
-              console.log(res.data.shareInfo)
-              this.$router.push({
-                path: '/userinfo/:info',
-                name: 'UserInfo',
-                params: {
-                  info: {
-                    account: this.account,
-                    shareInfo: res.data.shareInfo
-                  }
+            if (res.data.state === 1) {
+              this.$message.success('授权成功')
+              if (res.data.info !== null) {
+                console.log(res.data.info)
+                let obj = {
+                  token: res.data.token,
+                  info: res.data.info
                 }
-              })
+                this.$http.post('/auth/user/validate', obj)
+                this.$router.push({
+                  path: '/userinfo/:info',
+                  name: 'UserInfo',
+                  params: {
+                    info: {
+                      account: res.data.token,
+                      shareInfo: res.data.info
+                    }
+                  }
+                })
+              } else {
+                console.log('token is', res.data.token)
+                this.$http.post('/auth/user/info', res.data.token)
+                  .then((res) => {
+                    console.log('res.data is', res.data.shareInfo)
+                    this.$router.push({
+                      path: '/userinfo/:info',
+                      name: 'UserInfo',
+                      params: {
+                        info: {
+                          account: res.data.token,
+                          shareInfo: res.data.shareInfo
+                        }
+                      }
+                    })
+                  }, (err) => {
+                    console.log(err)
+                  })
+              }
             } else {
               this.$message.error(res.data.info)
             }

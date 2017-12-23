@@ -4,7 +4,7 @@ const db = require('../config/db.js')
 const userModel = '../schema/user.js' // 引入user的表结构
 const shareInfoModel = '../schema/share_info.js'
 const relationsModel = '../schema/relations.js'
-const additionModel = '../schema/addition.js'
+const addictionModel = '../schema/addiction.js'
 const casesModel = '../schema/cases.js'
 
 const hospitalClient = db.HospitalClient // 引入数据库
@@ -12,7 +12,7 @@ const hospitalClient = db.HospitalClient // 引入数据库
 const User = hospitalClient.import(userModel) // 用sequelize的import方法引入表结构，实例化了User。
 const ShareInfo = hospitalClient.import(shareInfoModel)
 const Relations = hospitalClient.import(relationsModel)
-const Addition = hospitalClient.import(additionModel)
+const Addiction = hospitalClient.import(addictionModel)
 const Cases = hospitalClient.import(casesModel)
 
 // const getUserById = async function (id) { // 注意是function* 而不是function 对于需要yield操作的函数都需要这种generator函数。
@@ -55,14 +55,14 @@ const getRelations = async function (id) {
   return relations
 }
 
-const getAddition = async function (id) {
-  const addition = await Addition.findAll({
+const getAddiction = async function (id) {
+  const addiction = await Addiction.findAll({
     where: {
       user_id: id
     }
   })
-  console.log(addition)
-  return addition
+  console.log(addiction)
+  return addiction
 }
 
 const getCases = async function (id) {
@@ -213,7 +213,7 @@ const createUser = async function (token, info) {
   let shareInfo = info
   let relations = info.relation
   let cases = info.cases
-  let addition = info.addition
+  let addiction = info.addition
   await ShareInfo.create({
     user_id: u.dataValues.id,
     marriage: shareInfo.marriage,
@@ -238,11 +238,11 @@ const createUser = async function (token, info) {
       relation: relations[i].relation
     })
   }
-  for (let i = 0; i < addition.length; i++) {
-    await Addition.create({
+  for (let i = 0; i < addiction.length; i++) {
+    await Addiction.create({
       user_id: u.dataValues.id,
-      smoke: addition[i].smoke,
-      alcohol: addition[i].alcohol
+      smoke: addiction[i].smoke,
+      alcohol: addiction[i].alcohol
     })
   }
   for (let i = 0; i < cases.length; i++) {
@@ -272,7 +272,7 @@ module.exports = {
   getUserByAccount,
   getShareInfo,
   getRelations,
-  getAddition,
+  getAddiction,
   getCases,
   resetPassword,
   update,

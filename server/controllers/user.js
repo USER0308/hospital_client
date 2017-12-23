@@ -3,11 +3,35 @@
 const user = require('../models/user.js')
 
 const getUserInfo = async function (ctx) {
-  const account = ctx.request.body // 获取url里传过来的参数里的id
-  console.log('account is ', account)
-  const result = await user.getUserByAccount(account)  // 通过yield “同步”地返回查询结果
-  // result.dataValues.id
-  ctx.body = result // 将请求的结果放到response的body里返回
+  const data = ctx.request.body
+  const getUser = await user.getUserByAccount(data.account)
+  if (getUser !== null) {
+    let shareInfo = await user.getShareInfo(getUser.dataValues.id)
+    let relations = await user.getRelations(getUser.dataValues.id)
+    let addiction = await user.getAddiction(getUser.dataValues.id)
+    let cases = await user.getCases(getUser.dataValues.id)
+    delete shareInfo.id
+    delete shareInfo.user_id
+    for (let i = 0; i < relations.length; i++) {
+      delete relations[i].id
+      delete relations[i].user_id
+    }
+    for (let i = 0; i < cases.length; i++) {
+      delete cases[i].id
+      delete cases[i].user_id
+    }
+    shareInfo.dataValues['relation'] = relations
+    shareInfo.dataValues['addition'] = addiction
+    shareInfo.dataValues['cases'] = cases
+    console.log('shareinfo is:', shareInfo)
+    ctx.body = {
+      success: true,
+      info: '登录成功',
+      shareInfo: shareInfo
+    }
+  }
+  console.log('in authorize', getUser)
+  // ctx.body = getUser
 }
 
 const authorize = async function (ctx) {
@@ -22,10 +46,20 @@ const authorize = async function (ctx) {
     if (getUser.dataValues.password === data.password) {
       let shareInfo = await user.getShareInfo(getUser.dataValues.id)
       let relations = await user.getRelations(getUser.dataValues.id)
-      let addition = await user.getAddition(getUser.dataValues.id)
+      let addiction = await user.getAddiction(getUser.dataValues.id)
       let cases = await user.getCases(getUser.dataValues.id)
+      delete shareInfo.id
+      delete shareInfo.user_id
+      for (let i = 0; i < relations.length; i++) {
+        delete relations[i].id
+        delete relations[i].user_id
+      }
+      for (let i = 0; i < cases.length; i++) {
+        delete cases[i].id
+        delete cases[i].user_id
+      }
       shareInfo.dataValues['relation'] = relations
-      shareInfo.dataValues['addition'] = addition
+      shareInfo.dataValues['addition'] = addiction
       shareInfo.dataValues['cases'] = cases
       console.log('shareinfo is:', shareInfo)
       ctx.body = {
@@ -191,7 +225,8 @@ const validate = async function (ctx) {
 }
 
 const operation = async function (ctx) {
-  const data = ctx.body
+  const data = ctx.request.body
+  console.log('data in request is', data)
   if (data.type === '1') {
     // add
     // data = {

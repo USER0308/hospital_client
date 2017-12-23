@@ -24,9 +24,6 @@ CREATE TABLE IF NOT EXISTS share_info (
     birthplace VARCHAR(1024) NOT NULL,
     nationality VARCHAR(64) NOT NULL,
     occupation VARCHAR(64) NOT NULL,
-    anaphylactogen VARCHAR(1024) DEFAULT '无',
-    infectiousDiseaseHistory VARCHAR(1024) DEFAULT '无',
-    geneticDiseaseHistory VARCHAR(1024) DEFAULT '无',
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
@@ -41,7 +38,7 @@ CREATE TABLE IF NOT EXISTS relations (
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS addition (
+CREATE TABLE IF NOT EXISTS addiction (
     id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     smoke VARCHAR(32) NOT NULL,
@@ -75,8 +72,8 @@ CREATE TABLE IF NOT EXISTS cases (
 -- INSERT INTO addition (user_id, smoke, alcohol) VALUES \
 -- ((SELECT id FROM user WHERE account = 'test'),'无', '偶尔');
 
-INSERT INTO cases (user_id, hospital_name, case_date, doctor_name, situation, suggestion, prescription, diagnosis) VALUES \
-((SELECT id FROM user WHERE account = 'test'),'广东省广州市华南理工大学附属医院', '2017-07-24', '郭平', '高烧不退,体温39.3摄氏度,食欲不振,出汗多', '进食富含高维生素等营养的易消化的消淡流质食品，如新鲜的菜汁、果汁等等', '少量使用苯巴比妥,之后每隔半小时检查一次体温','原虫感染性高烧');
+-- INSERT INTO cases (user_id, hospital_name, case_date, doctor_name, situation, suggestion, prescription, diagnosis) VALUES \
+-- ((SELECT id FROM user WHERE account = 'test'),'广东省广州市华南理工大学附属医院', '2017-07-24', '郭平', '高烧不退,体温39.3摄氏度,食欲不振,出汗多', '进食富含高维生素等营养的易消化的消淡流质食品，如新鲜的菜汁、果汁等等', '少量使用苯巴比妥,之后每隔半小时检查一次体温','原虫感染性高烧');
 
-INSERT INTO cases (user_id, hospital_name, case_date, doctor_name, situation, suggestion, prescription, diagnosis) VALUES \
-((SELECT id FROM user WHERE account = 'test'),'广东省人民医院', '2017-09-18', '李威仁', '胸部隐痛,痛时长则一小时,短则二十分钟,服用止痛药无效,胸部CT片子显示肺部右叶第三根肋骨附近有小块不规则不透明物体', '建议手术切除,防止扩散', '拓扑异构酶抑制剂','肺部肿瘤中期,瘤块直径约2厘米');
+-- INSERT INTO cases (user_id, hospital_name, case_date, doctor_name, situation, suggestion, prescription, diagnosis) VALUES \
+-- ((SELECT id FROM user WHERE account = 'test'),'广东省人民医院', '2017-09-18', '李威仁', '胸部隐痛,痛时长则一小时,短则二十分钟,服用止痛药无效,胸部CT片子显示肺部右叶第三根肋骨附近有小块不规则不透明物体', '建议手术切除,防止扩散', '拓扑异构酶抑制剂','肺部肿瘤中期,瘤块直径约2厘米');
