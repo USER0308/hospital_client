@@ -4,6 +4,7 @@ const user = require('../models/user.js')
 
 const getUserInfo = async function (ctx) {
   const data = ctx.request.body
+  console.log('in get users info', data)
   const getUser = await user.getUserByAccount(data.account)
   if (getUser !== null) {
     let shareInfo = await user.getShareInfo(getUser.dataValues.id)

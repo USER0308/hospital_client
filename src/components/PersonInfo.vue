@@ -160,6 +160,7 @@
     data () {
       return {
         account: '',
+        org: '',
         infoVisible: true,
         recordVisible: false,
         activeNames: ['1'],
@@ -188,10 +189,12 @@
         this.$router.push('/')
         return
       }
+      console.log(this.$route.params.info)
       console.log('account is', this.$route.params.info.account)
       this.account = this.$route.params.info.account
       console.log('shareinfo is: ', this.$route.params.info.shareInfo)
       this.userInfo = this.$route.params.info.shareInfo
+      this.org = this.$route.params.info.org
       console.log('account is', this.account)
       this.$http.post('/auth/user/getCases', {account: this.account})
         .then((res) => {
@@ -224,6 +227,9 @@
           account: this.account,
           info: info
         })
+        let obj = {}
+        this.$http('http://192.168.8.87:8889/edit', obj)
+          .then((res) => {}, (err) => {})
         this.$message.success('更新成功')
       },
       focus (key) {

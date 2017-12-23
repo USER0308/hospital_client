@@ -31,7 +31,7 @@ const getUserByAccount = async function (account) {
       account: account
     }
   })
-  // console.log('in model', getUser)
+  console.log('in model', getUser)
   return getUser
 }
 

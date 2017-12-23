@@ -94,6 +94,7 @@
             console.log(res.data)
             if (res.data.state === 1) {
               this.$message.success('授权成功')
+              console.log('授权成功,data is', res.data)
               if (res.data.info !== null) {
                 console.log(res.data.info)
                 let obj = {
@@ -101,19 +102,27 @@
                   info: res.data.info
                 }
                 this.$http.post('/auth/user/validate', obj)
-                this.$router.push({
-                  path: '/userinfo/:info',
-                  name: 'UserInfo',
-                  params: {
-                    info: {
-                      account: res.data.token,
-                      shareInfo: res.data.info
+                  .then((res) => {
+                    if (res.data.success) {
+                      this.$router.push({
+                        path: '/userinfo/:info',
+                        name: 'UserInfo',
+                        params: {
+                          info: {
+                            account: obj.token,
+                            shareInfo: obj.info,
+                            org: this.value
+                          }
+                        }
+                      })
                     }
-                  }
-                })
+                  }, (err) => {
+                    console.log('error', err)
+                  })
               } else {
                 console.log('token is', res.data.token)
-                this.$http.post('/auth/user/info', res.data.token)
+                let token = res.data.token
+                this.$http.post('/auth/user/info', {account: token})
                   .then((res) => {
                     console.log('res.data is', res.data.shareInfo)
                     this.$router.push({
@@ -121,7 +130,7 @@
                       name: 'UserInfo',
                       params: {
                         info: {
-                          account: res.data.token,
+                          account: token,
                           shareInfo: res.data.shareInfo
                         }
                       }
