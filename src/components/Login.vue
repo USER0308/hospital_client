@@ -76,7 +76,8 @@
           label: 'org2' // 广东省华南理工大学附属医院
         }],
         value: 'org2',
-        selection: ''
+        selection: '',
+        isAuthorize: 'true'
       }
     },
     methods: {
@@ -89,7 +90,7 @@
           password: this.password,
           org: this.value
         }
-        this.$http.post('http://192.168.8.87:8889/login', object)
+        this.$http.post('http://localhost:8888/login', object)
           .then((res) => {
             console.log(res.data)
             if (res.data.state === 1) {
@@ -99,7 +100,8 @@
                 console.log(res.data.info)
                 let obj = {
                   token: res.data.token,
-                  info: res.data.info
+                  info: res.data.info,
+                  isAuthorize: this.isAuthorize
                 }
                 this.$http.post('/auth/user/validate', obj)
                   .then((res) => {
@@ -131,7 +133,8 @@
                       params: {
                         info: {
                           account: token,
-                          shareInfo: res.data.shareInfo
+                          shareInfo: res.data.shareInfo,
+                          isAuthorize: this.isAuthorize
                         }
                       }
                     })

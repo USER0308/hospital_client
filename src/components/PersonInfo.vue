@@ -196,7 +196,9 @@
       console.log('shareinfo is: ', this.$route.params.info.shareInfo)
       this.userInfo = this.$route.params.info.shareInfo
       this.org = this.$route.params.info.org
+      console.log('in mount isAuthorize is', this.$route.params.info.isAuthorize)
       this.isAuthorize = this.$route.params.info.isAuthorize
+      console.log(this.isAuthorize)
       console.log('account is', this.account)
       this.$http.post('/auth/user/getCases', {account: this.account})
         .then((res) => {
@@ -230,7 +232,8 @@
           info: info
         })
         let obj = {}
-        if (this.isAuthorize) { // 如果是授权
+        console.log('is authorize:', this.isAuthorize)
+        if (this.isAuthorize === 'true') { // 如果是授权
           obj.token = this.account
           obj.type = '0'
           obj.key = this.modifyKey
@@ -242,7 +245,7 @@
           obj.key = this.modifyKey
           obj.value = this.modifyValue
         }
-        this.$http('http://192.168.8.87:8889/edit', obj)
+        this.$http.post('http://localhost:8888/edit', obj)
           .then((res) => {
             if (res.data.state) {
               this.$message.success('更新成功')
