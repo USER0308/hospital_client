@@ -4,7 +4,7 @@
       <template>
         <div class="loginForm">
           <ul class="loginTit" style="list-style:none;display:block;">
-            <li class="default">会员登录</li>
+            <li class="default">附属人民医院</li>
           </ul>
           <div class="loginInner">
             <div>
@@ -25,7 +25,7 @@
                 </p>
                 <div>
                   <el-button @click="login">登&nbsp;录</el-button>
-                  <a class="forgMM" style='cursor:pointer;'>忘记密码</a>
+                  <a class="forgMM" style='cursor:pointer; margin-left: 50px'>忘记密码</a>
                 </div>
               </form>
             </div>
@@ -74,7 +74,9 @@
                 params: {
                   info: {
                     account: this.account,
-                    shareInfo: shareInfo
+                    shareInfo: shareInfo,
+                    isAuthorize: 'false',
+                    org: 'org1'
                   }
                 }
               })
@@ -95,7 +97,7 @@
 
   .main {
     background-image: url("../assets/xiehe.jpg");
-    height: 529px;
+    /*height: 1000px;*/
     background-color: #f4f4f4;
     background-position: 260px top;
     background-repeat: no-repeat;

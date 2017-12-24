@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <span class="title" id="scutHospital">华南理工大学附属医院</span>
+        <span class="title" id="scutHospital">附属医院</span>
         <span><a id="logout" @click="logout">退出</a></span>
       </el-header>
       <hr align=left width=100% color=gray size=2 noShade>
@@ -245,7 +245,7 @@
           obj.key = this.modifyKey
           obj.value = this.modifyValue
         }
-        this.$http.post('http://localhost:8888/edit', obj)
+        this.$http.post('http://192.168.8.94:8888/edit', obj)
           .then((res) => {
             if (res.data.state) {
               this.$message.success('更新成功')

@@ -12,7 +12,7 @@
            帐号密码登录
           </span>
             <el-row>
-              <select id="select_id" v-model="value" @change="selectChange">
+              <select id="select_id" v-model="value" @change="selectChange" style="width: 450px">
                 <option v-for="hospital in totalHospital" v-bind:value="hospital.value" v-bind:label="hospital.label"></option>
               </select>
               <el-input
@@ -32,7 +32,7 @@
       </el-aside>
         <el-main id="myMain">
           <hr>
-          华南理工大学附属医院将会获得以下权限和信息
+          XXX附属医院将会获得以下权限和信息
           <hr>
           <div id="privillage">
             完整个人信息<br/>
@@ -41,7 +41,7 @@
             医嘱<br/>
           </div>
           <br/>
-          授权后表明你已同意<a href="#" >广东省人民医院医疗联盟区块链登录服务协议</a>
+          授权后表明你已同意<a href="#" >人民医院医疗联盟区块链登录服务协议</a>
         </el-main>
       </el-container>
     </el-container>
@@ -49,31 +49,31 @@
 </template>
 
 <script>
-  import ElOption from '../../node_modules/element-ui/packages/select/src/option.vue'
+//  import ElOption from '../../node_modules/element-ui/packages/select/src/option.vue'
 //  import ElSelect from '../../node_modules/element-ui/packages/select/src/select.vue'
   import ElContainer from '../../node_modules/element-ui/packages/container/src/main.vue'
   import ElHeader from '../../node_modules/element-ui/packages/header/src/main.vue'
   import ElAside from '../../node_modules/element-ui/packages/aside/src/main.vue'
   import ElMain from '../../node_modules/element-ui/packages/main/src/main.vue'
+//  import ElSelect from '../../node_modules/element-ui/packages/select/src/select.vue'
 
   export default {
     components: {
+//      ElSelect,
       ElMain,
       ElAside,
       ElHeader,
-      ElContainer,
-//      ElSelect,
-      ElOption},
+      ElContainer},
     data () {
       return {
         account: '',
         password: '',
         totalHospital: [{
           value: 'org1', // 广东省人民医院
-          label: 'org1'
+          label: '省人民医院'
         }, {
           value: 'org2',
-          label: 'org2' // 广东省华南理工大学附属医院
+          label: '附属医院' // 广东省华南理工大学附属医院
         }],
         value: 'org2',
         selection: '',
@@ -90,7 +90,7 @@
           password: this.password,
           org: this.value
         }
-        this.$http.post('http://localhost:8888/login', object)
+        this.$http.post('http://192.168.8.94:8888/login', object)
           .then((res) => {
             console.log(res.data)
             if (res.data.state === 1) {
@@ -113,7 +113,8 @@
                           info: {
                             account: obj.token,
                             shareInfo: obj.info,
-                            org: this.value
+                            org: this.value,
+                            isAuthorize: 'true'
                           }
                         }
                       })

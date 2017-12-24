@@ -4,7 +4,7 @@ const Sequelize = require('sequelize') // 引入sequelize
 
 // 使用url连接的形式进行连接，注意将root: 后面的XXXX改成自己数据库的密码
 const HospitalClient = new Sequelize('hospital_client', 'hospital_client', 'hospital_client', {
-  host: 'localhost',
+  host: '192.168.8.94',
   port: 3306,
   dialect: 'mysql',
   dialectOptions: {
